@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { ClubItem } from './types';
+import { ClubItem } from '../types';
 import { motion } from 'framer-motion';
 
 export const ClubGridItem: React.FC<{ item: ClubItem; onClick: (id: number) => void }> = memo(({ item, onClick }) => (

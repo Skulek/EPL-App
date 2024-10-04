@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { ClubItem } from '../types';
-import { ClubGridItem } from '../ClubGridItem';
+import { ClubGridItem } from '../components/ClubGridItem';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../api';
 
 const fetchClubs = async (): Promise<ClubItem[]> => {
-  const response = await axios.get<ClubItem[]>('http://localhost:5201/clubs');
+  const response = await api.get<ClubItem[]>('/clubs');
   return response.data;
 };
 
