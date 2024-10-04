@@ -9,6 +9,8 @@ on:
   workflow_dispatch:
 
 env:
+  AZURE_WEBAPP_NAME: mybackendEpl
+  AZURE_WEBAPP_PACKAGE_PATH: './backend'
   DOTNET_VERSION: '8.0.x'
 jobs:
   build-and-deploy:
