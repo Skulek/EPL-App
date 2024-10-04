@@ -12,6 +12,7 @@ env:
   AZURE_WEBAPP_NAME: mybackendEpl
   AZURE_WEBAPP_PACKAGE_PATH: './backend'
   DOTNET_VERSION: '8.0.x'
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,6 +24,15 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
+    - name: Check .NET version
+      run: dotnet --info
+
+    - name: Clean
+      run: |
+        cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        dotnet clean
+        dotnet nuget locals all --clear
+
     - name: Build with dotnet
       run: |
         cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
@@ -33,9 +43,14 @@ jobs:
         cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+    - name: List publish directory
+      run: ls -R ${{env.DOTNET_ROOT}}/myapp
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
         package: ${{env.DOTNET_ROOT}}/myapp
+      env:
+        ACTIONS_STEP_DEBUG: true
