@@ -4,7 +4,6 @@ import Navbar from './components/NavBar';
 import ClubGrid from './pages/ClubGrid';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PlayerGrid from './pages/PlayerGrid';
-import { API_URL } from './config';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +15,6 @@ const App: React.FC = () => {
       <div className="App min-h-screen bg-gray-100 flex flex-col">
         <Navbar />
         <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <p>Current API URL: {API_URL}</p>
           <Routes>
           <Route path="/" element={<ClubGrid />} />
           <Route path="/clubs/:clubId/players" element={<PlayerGrid />} />
