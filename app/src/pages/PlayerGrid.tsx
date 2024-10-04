@@ -5,10 +5,9 @@ import { Player } from "../types/Player";
 import api from "../api";
 import PlayerTable from "../components/PlayerTable";
 import { Helmet } from "react-helmet";
-import axios from "axios";
 
 const fetchPlayers = async (clubId: string): Promise<Player[]> => {
-  const response = await axios.get<Player[]>(`/clubs/${clubId}/players`);
+  const response = await api.get<Player[]>(`/clubs/${clubId}/players`);
   return response.data;
 };
 
