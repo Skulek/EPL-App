@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5201
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5201:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ConnectionStrings__DefaultConnection=Data Source=football.db
+    volumes:
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data:
