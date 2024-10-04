@@ -1,6 +1,0 @@
-@backnd_HostAddress = http://localhost:5201
-
-GET {{backnd_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
