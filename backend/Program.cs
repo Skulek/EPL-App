@@ -29,7 +29,6 @@ app.UseCors(builder => builder
     .AllowAnyHeader());
 
 
-app.UseHttpsRedirection();
 
 
 app.MapGet("/clubs", async (AppDbContext db) => await db.Clubs.ToListAsync());
@@ -50,7 +49,6 @@ using (var scope = app.Services.CreateScope())
     var httpClientFactory = services.GetRequiredService<IHttpClientFactory>();
     await SeedDataAsync(context, httpClientFactory);
 }
-
 app.Run();
 
 async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFactory)
