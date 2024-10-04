@@ -94,7 +94,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
 
         // Fetch players
         var page = 1;
-        var totalPages = 10;
+        var totalPages = 1;
 
         do
         {
@@ -104,7 +104,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             var playersJson =
                 await JsonSerializer.DeserializeAsync<JsonElement>(await playersResponse.Content.ReadAsStreamAsync());
 
-            //totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
+            totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
 
             foreach (var playerData in playersJson.GetProperty("response").EnumerateArray())
             {
