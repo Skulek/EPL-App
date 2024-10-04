@@ -1,5 +1,5 @@
 # EPL App
-
+ Disclaimer - app uses epl from the 2023 season - couldnt find apropriate api for newest version could be free
 ## Table of Contents
 
 - [Overview](#overview)
