@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import Navbar from './NavBar';
+import Navbar from './components/NavBar';
 import ClubGrid from './pages/ClubGrid';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PlayerGrid from './pages/PlayerGrid';
