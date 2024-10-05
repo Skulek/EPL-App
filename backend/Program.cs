@@ -10,7 +10,7 @@ builder.Services.AddCors();
 builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-       options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -29,14 +29,12 @@ app.UseCors(builder => builder
     .AllowAnyHeader());
 
 
-
-
 app.MapGet("/clubs", async (AppDbContext db) => await db.Clubs.ToListAsync());
 
-app.MapGet("/clubs/{id}", async (int id, AppDbContext db) => 
+app.MapGet("/clubs/{id}", async (int id, AppDbContext db) =>
     await db.Clubs.FindAsync(id));
 
-app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) => 
+app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) =>
     await db.Players.Where(p => p.ClubId == id).ToListAsync());
 
 
@@ -50,6 +48,7 @@ using (var scope = app.Services.CreateScope())
     var httpClientFactory = services.GetRequiredService<IHttpClientFactory>();
     await SeedDataAsync(context, httpClientFactory);
 }
+
 app.Run();
 
 async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFactory)
@@ -69,10 +68,10 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
 
         int leagueId = 39; // Premier League
         int season = 2022;
-        
+
 
         var teamsResponse =
-                await client.GetAsync($"https://v3.football.api-sports.io/teams?league={leagueId}&season={season}");
+            await client.GetAsync($"https://v3.football.api-sports.io/teams?league={leagueId}&season={season}");
         var teamsJson =
             await JsonSerializer.DeserializeAsync<JsonElement>(await teamsResponse.Content.ReadAsStreamAsync());
 
@@ -87,13 +86,10 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
         }
 
         await context.SaveChangesAsync();
-
-
-
-
+        
         // Fetch players
         var page = 1;
-        var totalPages = 1;
+        int totalPages;
 
         do
         {
@@ -135,7 +131,6 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             {
                 await Task.Delay(1000);
             }
-
         } while (page <= totalPages);
     }
 }
