@@ -5,6 +5,7 @@ import { Player } from "../types/Player";
 import api from "../api";
 import PlayerTable from "../components/PlayerTable";
 import { Helmet } from "react-helmet";
+import { BallTriangle } from "react-loader-spinner";
 
 const fetchPlayers = async (clubId: string): Promise<Player[]> => {
   const response = await api.get<Player[]>(`/clubs/${clubId}/players`);
@@ -33,7 +34,18 @@ const PlayerGrid: React.FC = () => {
 
   const renderContent = useCallback(() => {
     if (playersLoading || clubNameLoading) {
-      return <div className="text-center">Loading...</div>;
+      return (
+        <div className="flex justify-center items-center h-64">
+          <BallTriangle
+            height={100}
+            width={100}
+            radius={5}
+            color="#4fa94d"
+            ariaLabel="ball-triangle-loading"
+            visible={true}
+          />
+        </div>
+      );
     }
 
     if (playersError || clubNameError) {
