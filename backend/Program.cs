@@ -42,8 +42,8 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
 
     var httpClientFactory = services.GetRequiredService<IHttpClientFactory>();
     await SeedDataAsync(context, httpClientFactory);
