@@ -129,7 +129,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             // Add a delay to avoid hitting rate limits
             if (page % 2 == 1)
             {
-                await Task.Delay(1000);
+                await Task.Delay(2000);
             }
         } while (page <= totalPages);
     }
