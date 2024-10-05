@@ -39,16 +39,22 @@ const PlayerTableItem: React.FC<{ player: Player }> = ({ player }) => {
             </button>
           </td>
         </tr>
-        {isExpanded && (
-          <tr className="bg-gray-50 sm:hidden">
-            <td colSpan={5} className="px-3 py-3">
-              <div className="text-sm">
-                <p className="mb-1"><span className="font-semibold">Birth Date:</span> {formatDate(player.birthDate)}</p>
-                <p><span className="font-semibold">Position:</span> {player.position}</p>
+        <tr className="sm:hidden">
+          <td colSpan={5} className="p-0">
+            <div 
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                isExpanded ? "max-h-24" : "max-h-0"
+              }`}
+            >
+              <div className="bg-gray-50 px-3 py-3">
+                <div className="text-sm">
+                  <p className="mb-1"><span className="font-semibold">Birth Date:</span> {formatDate(player.birthDate)}</p>
+                  <p><span className="font-semibold">Position:</span> {player.position}</p>
+                </div>
               </div>
-            </td>
-          </tr>
-        )}
+            </div>
+          </td>
+        </tr>
       </>
     );
   };
