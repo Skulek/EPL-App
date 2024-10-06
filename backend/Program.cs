@@ -29,6 +29,8 @@ app.UseCors(builder => builder
     .AllowAnyHeader());
 
 
+_ = Task.Run(() => PrepareDatabase(app));
+
 app.MapGet("/clubs", async (AppDbContext db) => await db.Clubs.ToListAsync());
 
 app.MapGet("/clubs/{id}", async (int id, AppDbContext db) =>
@@ -38,23 +40,34 @@ app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) =>
     await db.Players.Where(p => p.ClubId == id).ToListAsync());
 
 
-using (var scope = app.Services.CreateScope())
+
+await app.RunAsync();
+
+
+async Task PrepareDatabase(WebApplication app)
 {
+    using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
-    await context.Database.EnsureDeletedAsync();
-    await context.Database.EnsureCreatedAsync();
-
     var httpClientFactory = services.GetRequiredService<IHttpClientFactory>();
-    await SeedDataAsync(context, httpClientFactory);
+
+    try
+    {
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        await SeedDataAsync(context, httpClientFactory);
+        Console.WriteLine("Seeding completed successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during seeding: {ex.Message}");
+    }
 }
 
-app.Run();
+
 
 async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFactory)
 {
-    if (!context.Clubs.Any())
-    {
         using var client = httpClientFactory.CreateClient();
 
         var apiKey = Environment.GetEnvironmentVariable("FOOTBALL_API_KEY");
@@ -89,7 +102,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
         
         // Fetch players
         var page = 1;
-        int totalPages;
+        int totalPages = 10;
 
         do
         {
@@ -99,7 +112,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             var playersJson =
                 await JsonSerializer.DeserializeAsync<JsonElement>(await playersResponse.Content.ReadAsStreamAsync());
 
-            totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
+            //totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
 
             foreach (var playerData in playersJson.GetProperty("response").EnumerateArray())
             {
@@ -127,11 +140,6 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             await context.SaveChangesAsync();
             page++;
 
-            // Add a delay to avoid hitting rate limits
-            if (page % 2 == 1)
-            {
-                await Task.Delay(5000);
-            }
         } while (page <= totalPages);
-    }
+    
 }
