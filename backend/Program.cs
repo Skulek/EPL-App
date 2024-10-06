@@ -67,7 +67,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
         client.DefaultRequestHeaders.Add("x-rapidapi-host", "v3.football.api-sports.io");
 
         int leagueId = 39; // Premier League
-        int season = 2022;
+        int season = 2024;
 
 
         var teamsResponse =
@@ -130,7 +130,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             // Add a delay to avoid hitting rate limits
             if (page % 2 == 1)
             {
-                await Task.Delay(15000);
+                await Task.Delay(5000);
             }
         } while (page <= totalPages);
     }
