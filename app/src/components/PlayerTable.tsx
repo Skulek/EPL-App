@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Player } from '../types/Player';
+import { Player } from '../types/types.ts';
 import {
   useReactTable,
   getCoreRowModel,

@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ClubItem } from '../types';
 import { ClubGridItem } from '../components/ClubGridItem';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api';
+import { Club } from '../types/types.ts';
 
-const fetchClubs = async (): Promise<ClubItem[]> => {
-  const response = await api.get<ClubItem[]>('/clubs');
+const fetchClubs = async (): Promise<Club[]> => {
+  const response = await api.get<Club[]>('/clubs');
   return response.data;
 };
 
@@ -22,20 +22,21 @@ const ClubGrid: React.FC = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: clubItems, isLoading, error } = useQuery<ClubItem[], Error>({
+  const { data: clubs, isLoading, error } = useQuery<Club[], Error>({
     queryKey: ['clubs'],
     queryFn: fetchClubs,
   });
 
-  const handleClubClick = (club: ClubItem) => {
+  const handleClubClick = (club: Club) => {
     navigate(`/clubs/${club.id}/players`, { state: { clubName: club.name } });
   };
 
   const filteredClubs = useMemo(() => {
-    return clubItems?.filter(club => 
-      club.name.toLowerCase().includes(searchTerm.toLowerCase())
+    return clubs?.filter(club => 
+      club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      club.code.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [clubItems, searchTerm]);
+  }, [clubs, searchTerm]);
 
   if (isLoading) {
     return (
@@ -59,7 +60,7 @@ const ClubGrid: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <input
         type="text"
-        placeholder="Search clubs..."
+        placeholder="Search clubs by name or code..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded"

@@ -13,7 +13,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Player>()
-            .HasOne(p => p.Club).WithMany().HasForeignKey(o => o.ClubId);
+            .HasOne(p => p.Club).WithMany(p => p.Players).HasForeignKey(o => o.ClubId);
         modelBuilder.Entity<Player>().HasIndex(p => p.ApiId).IsUnique();
     }
 }

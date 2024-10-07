@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Player } from "../types/Player";
+import { Player } from "../types/types.ts";
 import { formatDate } from "../utills";
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import PlayerImage from "./PlayerImage";

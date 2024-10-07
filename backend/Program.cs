@@ -35,10 +35,22 @@ app.MapGet("/clubs/{id}", async (int id, AppDbContext db) =>
     await db.Clubs.FindAsync(id));
 
 app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) =>
-    await db.Players.Where(p => p.ClubId == id).ToListAsync());
+{
+    var club = await db.Clubs.Include(o => o.Players).FirstOrDefaultAsync(o => o.Id == id);
+    if (club == null) return Results.NotFound();
+    return Results.Ok(club.Players.Select(o => new {
+        o.Id,
+        o.ApiId,
+        o.FirstName,
+        o.LastName,
+        o.Position,
+        o.PhotoUrl,
+        o.BirthDate
+    }));
+});
 
 
-_ = Task.Run(() => PrepareDatabase(app));
+//_ = Task.Run(() => PrepareDatabase(app));
 
 app.Run();
 
@@ -92,7 +104,8 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             var team = new Club
             {
                 Name = teamData.GetProperty("team").GetProperty("name").GetString(),
-                LogoUrl = teamData.GetProperty("team").GetProperty("logo").GetString()
+                LogoUrl = teamData.GetProperty("team").GetProperty("logo").GetString() ?? "N/A",
+                Code = teamData.GetProperty("team").GetProperty("code").GetString() ?? "N/A"
             };
             context.Clubs.Add(team);
         }

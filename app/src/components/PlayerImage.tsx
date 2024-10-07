@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Player } from "../types/Player";
+import { Player } from "../types/types.ts";
 
   
   const PlayerImage: React.FC<{ player: Player }> = ({ player }) => {

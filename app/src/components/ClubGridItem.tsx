@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
-import { ClubItem } from '../types';
+import { Club } from '../types/types';
 import { motion } from 'framer-motion';
 
-export const ClubGridItem: React.FC<{ item: ClubItem; onClick: (id: number) => void }> = memo(({ item, onClick }) => (
+export const ClubGridItem: React.FC<{ item: Club; onClick: (id: number) => void }> = memo(({ item, onClick }) => (
     <motion.div
       className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md cursor-pointer"
       whileHover={{ scale: 1.05 }}
@@ -14,5 +14,6 @@ export const ClubGridItem: React.FC<{ item: ClubItem; onClick: (id: number) => v
     >
       <img src={item.logoUrl} alt={item.name} className="w-24 h-24 object-contain mb-4" loading="lazy" />
       <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+      <p className="text-sm text-gray-600">{item.code}</p>
     </motion.div>
   ));

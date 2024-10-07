@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { Player } from "../types/Player";
+import { Player } from "../types/types.ts";
 import api from "../api";
 import PlayerTable from "../components/PlayerTable";
 import { Helmet } from "react-helmet";

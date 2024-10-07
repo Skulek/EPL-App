@@ -6,3 +6,11 @@ export interface Player {
   photoUrl: string;
   birthDate: string;
 }
+
+
+export interface Club {
+  id: number;
+  name: string;
+  code: string;
+  logoUrl: string;
+}
