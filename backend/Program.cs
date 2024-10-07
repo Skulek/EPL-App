@@ -29,8 +29,6 @@ app.UseCors(builder => builder
     .AllowAnyHeader());
 
 
-_ = Task.Run(() => PrepareDatabase(app));
-
 app.MapGet("/clubs", async (AppDbContext db) => await db.Clubs.ToListAsync());
 
 app.MapGet("/clubs/{id}", async (int id, AppDbContext db) =>
@@ -40,8 +38,9 @@ app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) =>
     await db.Players.Where(p => p.ClubId == id).ToListAsync());
 
 
+_ = Task.Run(() => PrepareDatabase(app));
 
-await app.RunAsync();
+app.Run();
 
 
 async Task PrepareDatabase(WebApplication app)
@@ -102,7 +101,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
         
         // Fetch players
         var page = 1;
-        int totalPages = 10;
+        int totalPages;
 
         do
         {
@@ -112,7 +111,7 @@ async Task SeedDataAsync(AppDbContext context, IHttpClientFactory httpClientFact
             var playersJson =
                 await JsonSerializer.DeserializeAsync<JsonElement>(await playersResponse.Content.ReadAsStreamAsync());
 
-            //totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
+            totalPages = playersJson.GetProperty("paging").GetProperty("total").GetInt32();
 
             foreach (var playerData in playersJson.GetProperty("response").EnumerateArray())
             {
