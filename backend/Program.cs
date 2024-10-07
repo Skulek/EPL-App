@@ -50,7 +50,7 @@ app.MapGet("/clubs/{id}/players", async (int id, AppDbContext db) =>
 });
 
 
-//_ = Task.Run(() => PrepareDatabase(app));
+_ = Task.Run(() => PrepareDatabase(app));
 
 app.Run();
 
